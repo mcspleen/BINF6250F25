@@ -18,19 +18,19 @@ Need to define helper function _count_transitions_from _msa() for transition est
 
 Need to change Viterbi, Forward, Backward, and Baum-Welch to work with states "I", "M", and "D"
 and alphabet "ACDEFGHIKLMNPQRSTVWY".
-  - Once adapted, we can fill  out `_forward_table()`, `_backward_table()`, `_compute_posterior()`,
-    `_reestimate_emissions()`, and `_reestimate_transitions()`
+  - Once adapted, we can fill  out _forward_table(), _backward_table(), _compute_posterior(),
+    _reestimate_emissions(), and _reestimate_transitions()
 
 ```
 
 # Successes
 We successfully added functions to extract msa's from fasta files, hard-code allowable transitions, and count transitions 
-from the msa's. We also were able to the Viterbi and Forward algorithms from the `HMMBase` class to work with the new 
+from the msa's. We also were able to the Viterbi and Forward algorithms from the HMMBase class to work with the new 
 states and alphabet in the Profile HMM. 
 
 # Struggles
-We were unable to get to `_reestimate_emissions()` and `_reestimate_transitions()`, as well as fully adapting the Backward 
-and Baum-Welch algorithms. Within our `_compute_posterior()`, we utilized `HMMBase`'s Backward algorithm. 
+We were unable to get to _reestimate_emissions() and _reestimate_transitions(), as well as fully adapting the Backward 
+and Baum-Welch algorithms. Within our _compute_posterior(), we utilized HMMBase's Backward algorithm. 
 
 # Personal Reflections
 ## Group Leader (Jason)
