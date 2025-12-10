@@ -37,7 +37,7 @@ and Baum-Welch algorithms. Within our _compute_posterior(), we utilized HMMBase'
 This project was really tough, especially with the timing of the semester. I would love to continue learning about this as 
 the coding behind protein structure prediction has been a mystery to me since first learning about it in biochemistry. 
 
-## Other member
+## Other member (Michael)
 Other members' reflections on the project
 
 # Generative AI Appendix
