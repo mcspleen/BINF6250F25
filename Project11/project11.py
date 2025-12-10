@@ -621,11 +621,8 @@ class HMM(BaseHMM):
                 converged = True
                 print(f'Converged after {count} iterations')
 
-
-import numpy as np
 from math import log, exp, inf
 from copy import deepcopy
-
 
 class ProfileHMM:
     def __init__(self, length, alphabet="ACDEFGHIKLMNPQRSTVWY"):
@@ -640,8 +637,8 @@ class ProfileHMM:
     def read_msa(self, fasta_path) -> dict:
         """
         Read a FASTA file containing MSA into a list of alignments
-        :param fasta_path: Path to fasta file
-        :return: list of alignments
+        :param: Path to fasta file
+        :return: dictionary of alignments
         """
         sequences = {}
         header = ""
@@ -673,7 +670,11 @@ class ProfileHMM:
         return states
 
     def _can_transition(self, from_state, to_state):
-        """Check if transition from_state -> to_state is allowed in topology."""
+        """
+        Defines valid state transitions.
+        :params: start state, end state
+        :return: dictionary of alignments
+        """
         # Handle Begin state
         if from_state == "Begin":
             return to_state in ["M1", "I0", "D1"]
@@ -718,9 +719,9 @@ class ProfileHMM:
         return False
 
     def init_from_msa(self, msa, pseudocount=1e-100):
-        """Initialize parameters from labeled multiple sequence alignment.
-
-        Args:
+        """
+        Initialize parameters from labeled multiple sequence alignment.
+        :params:
             msa: list of aligned sequences (gaps = '-')
             pseudocount: small value to avoid zero probabilities
         """
@@ -757,7 +758,11 @@ class ProfileHMM:
             self.emit_probs[f"D{i}"] = {}
 
     def _count_transitions_from_msa(self, msa):
-        """Count state transitions from MSA paths."""
+        """
+        Count state transitions from MSA paths.
+        :param: MSA
+        :return: dictionary of transition counts
+        """
         trans_counts = {}
 
         for seq in msa:
@@ -885,6 +890,28 @@ class ProfileHMM:
 
         return list(reversed(path))
 
+    def baum_welch(self, sequences, max_iterations=100, convergence_threshold=1e-6):
+        """Train pHMM using EM algorithm on unlabeled sequences."""
+        prev_loglik = -inf
+
+        for iteration in range(max_iterations):
+            posteriors = []
+            for seq in sequences:
+                forward = self.forward(seq)
+                backward = self.backward(seq)
+                posterior = self._compute_posterior(forward, backward)
+                posteriors.append(posterior)
+
+            self._reestimate_emissions(posteriors, sequences)
+            self._reestimate_transitions(posteriors, sequences)
+
+            loglik = sum(self._log_likelihood(seq) for seq in sequences)
+            if abs(loglik - prev_loglik) < convergence_threshold:
+                return True
+            prev_loglik = loglik
+
+        return False
+
     def _compute_posterior(self, forward, backward):
         """Compute gamma (state posteriors) from forward-backward."""
         n = len(forward) - 1
@@ -905,7 +932,11 @@ class ProfileHMM:
         return posteriors
 
     def _log_likelihood(self, sequence):
-        """Compute log P(sequence | model)."""
+        """
+        Calculates the probability of the sequence in logspace.
+        :param: protein sequence
+        :return: probability in logspace
+        """
         F = self._forward_table(sequence)
         n = len(sequence)
 
