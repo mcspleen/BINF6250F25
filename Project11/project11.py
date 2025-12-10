@@ -839,8 +839,8 @@ class ProfileHMM:
     def viterbi(self, sequence):
         """
         Viterbi algorithm implementation
-        :param sequence:
-        :return:
+        :param sequence: sequence of amino acids
+        :return: list of the most optimal path of states
         """
         n = len(sequence)
         V = [{} for _ in range(n + 1)]
